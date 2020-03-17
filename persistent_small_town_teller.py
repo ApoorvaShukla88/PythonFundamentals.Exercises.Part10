@@ -16,3 +16,11 @@ class PersistenceUtils:
         with open(file_path, 'rb') as file_handler:
             data = pickle.load(file_handler)
         return data
+
+    def save_data(self):
+        PersistenceUtils.write_pickle("customers.pickle", self.customers)
+        PersistenceUtils.write_pickle("acc_num.pickle", self.accounts)
+
+    def load_data(self):
+        self.customers = PersistenceUtils.load_pickle("customers.pickle")
+        self.accounts = PersistenceUtils.load_pickle("acc_num.pickle")
