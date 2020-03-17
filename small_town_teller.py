@@ -1,20 +1,23 @@
+import PersistenceUtils
+from typing import Dict
+import pickle
+
+
 class Person:
     base_customer_id = 1
 
     def __init__(self, first_name, last_name):
+        self.id = id
         self.first_name = first_name
         self.last_name = last_name
-        Person.base_customer_id = Person.base_customer_id + 1
-        self.id = Person.base_customer_id
 
 
 class Account:
-    def __init__(self, acc_number, acc_type, owner, balance):
-        Account.acc_number = Account.acc_number + 1000
+    def __init__(self, acc_number, acc_type, owner):
         self.acc_number = Account.acc_number
         self.acc_type = acc_type
         self.owner = owner
-        self.balance = balance
+        self.balance = 0
 
 
 class Bank:
@@ -24,56 +27,41 @@ class Bank:
         self.acc_num = []
 
     def add_customer(self, customer: Person):
-        if customer in self.customers:
-            print("This person already exists")
+        if customer.id in self.customers:
+            raise ValueError(f"Customer with id {customer.id} already exists.")
         else:
-            print(customer.id)
-            self.customers.append(customer)
-
+            self.customers[customer.id] = customer
 
     def add_account(self, account: Account):
-        self.acc_num.append(account)
+        if account.owner.id not in self.acc_num:
+            raise ValueError("Invalid user")
+        elif Account.acc_number in self.acc_num:
+            raise ValueError("Account number already exists")
+        else:
+            self.acc_num[Account.acc_number] = Account
+
 
     def remove_acc(self, account: Account):
-        self.acc_num.remove(account)
+        self.acc_num.remove(Account.acc_number)
 
     def deposit(self, amount, account: Account):
         curr_bal = Account.balance
-        deposit_bal = curr_bal + amount
-        Account.balance = deposit_bal
-
+        Account.balance = curr_bal + amount
 
     def withdraw(self, amount, account: Account):
         curr_bal = Account.balance
-        new_bal = curr_bal - amount
-        Account.balance = new_bal
+        Account.balance = curr_bal - amount
 
     def chk_balance(self, account: Account):
         return Account.balance
 
-def main():
-  if __name__ == "__main__":
-      main()
+    def save_data(self):
+        PersistenceUtils.write_pickle("customers.pickle", self.customers)
+        PersistenceUtils.write_pickle("acc_num.pickle", self.accounts)
+
+    def load_data(self):
+        self.customers = PersistenceUtils.load_pickle("customers.pickle")
+        self.accounts = PersistenceUtils.load_pickle("acc_num.pickle")
 
 
 
-
-zc_bank = Bank()
-bob = Person(1, "Bob", "Smith")
-print(bob)
-
-# from small_town_teller import Person, Account, Bank
-#
-# zc_bank = Bank()
-# bob = Person(1, "Bob", "Smith")
-# zc_bank.add_customer(bob)
-# bob_savings = Account(1001, "SAVINGS", bob)
-# zc_bank.add_account(bob_savings)
-# zc_bank.balance_inquiry(1001)
-# # 0
-# zc_bank.deposit(1001, 256.02)
-# zc_bank.balance_inquiry(1001)
-# # 256.02
-# zc_bank.withdrawal(1001, 128)
-# zc_bank.balance_inquiry(1001)
-# # 128.02
