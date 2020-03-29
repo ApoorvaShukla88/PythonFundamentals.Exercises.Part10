@@ -55,13 +55,5 @@ class Bank:
     def chk_balance(self, account: Account):
         return Account.balance
 
-    def save_data(self):
-        PersistenceUtils.write_pickle("customers.pickle", self.customers)
-        PersistenceUtils.write_pickle("acc_num.pickle", self.accounts)
-
-    def load_data(self):
-        self.customers = PersistenceUtils.load_pickle("customers.pickle")
-        self.accounts = PersistenceUtils.load_pickle("acc_num.pickle")
-
 
 
